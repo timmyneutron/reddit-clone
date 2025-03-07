@@ -14,3 +14,6 @@ Stack used:
 
 ## Getting Started
 Visit the demo site at [https://reddit.timmyneutron.com](https://reddit.timmyneutron.com).
+
+## Demo Video
+Watch the demo video at [https://youtu.be/trDyG-FBalI](https://youtu.be/trDyG-FBalI).
