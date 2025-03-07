@@ -78,11 +78,13 @@ function App() {
               </div>
           </form>
         }
-        {posts.map(post => 
-          <Post
-            key={post.id}
-            post={post}
-          />
+        {[...posts]
+          .sort((a, b) => b.score - a.score)
+          .map(post => 
+            <Post
+              key={post.id}
+              post={post}
+            />
         )}
         {posts.length === 0 && (
             <div className="text-center text-gray-500 py-12">
