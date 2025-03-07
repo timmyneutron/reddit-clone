@@ -22,10 +22,16 @@ const postsSlice = createSlice({
         comments: [],
         score: 0,
       };
-      state.posts.push(newPost);
+      state.posts.unshift(newPost);
+    },
+    votePost(state, action: PayloadAction<{ postId: string; change: number }>) {
+      const post = state.posts.find(p => p.id === action.payload.postId);
+      if (post) {
+        post.score += action.payload.change;
+      }
     },
   },
 });
 
-export const { addPost } = postsSlice.actions;
+export const { addPost, votePost } = postsSlice.actions;
 export default postsSlice.reducer;

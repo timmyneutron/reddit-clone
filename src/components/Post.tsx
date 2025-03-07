@@ -1,25 +1,28 @@
 import { ArrowBigUp, ArrowBigDown } from 'lucide-react';
 import { Post as PostType } from '../types';
 import { formatDistanceToNow } from 'date-fns';
+import { useDispatch } from 'react-redux';
+import { votePost } from '../store/postsSlice';
 
 interface PostProps {
   post: PostType;
 }
 
 export function Post({ post }: PostProps) {
+  const dispatch = useDispatch();
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-4">
       <div className="flex items-start gap-4">
         <div className="flex flex-col items-center">
           <button
-            onClick={() => console.log("upvote")}
+            onClick={() => dispatch(votePost({ postId: post.id, change: 1 }))}
             className="text-gray-500 hover:text-blue-500 transition-colors cursor-pointer"
           >
             <ArrowBigUp size={24} />
           </button>
           <span className="font-bold text-lg">{post.score}</span>
           <button
-            onClick={() => console.log("downvote")}
+            onClick={() => dispatch(votePost({ postId: post.id, change: -1 }))}
             className="text-gray-500 hover:text-red-500 transition-colors cursor-pointer"
           >
             <ArrowBigDown size={24} />
