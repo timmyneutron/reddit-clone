@@ -1,7 +1,13 @@
 import { Layout } from "lucide-react"
 import { useState } from "react";
+import { RootState } from './store/store';
+import { addPost } from './store/postsSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 function App() {
+  const dispatch = useDispatch();
+  const posts = useSelector((state: RootState) => state.posts.posts);
+
   const [newPost, setNewPost] = useState({ title: '', content: '' });
   const [showNewPost, setShowNewPost] = useState(false);
 
@@ -9,7 +15,13 @@ function App() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert("Submit");
+    if (newPost.title.trim() && newPost.content.trim()) {
+      dispatch(addPost({
+        ...newPost,
+      }));
+      setNewPost({ title: '', content: '' });
+      setShowNewPost(false);
+    }
   };
 
   return (
@@ -22,12 +34,15 @@ function App() {
           </div>
         </div>
       </header>
-      <main className="max-w-4xl mx-auto px-4 py-8">
-        <button
-          className="px-4 py-2 mb-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors cursor-pointer"
-          onClick={toggleShowNewPost}>
-            {showNewPost ? "Close" : "Create Post"}
-        </button>
+      <main className="flex flex-col justify-center max-w-4xl mx-auto px-4 py-8">
+        {!showNewPost &&
+          <button
+            onClick={toggleShowNewPost}
+            className="w-full mb-6 px-4 py-3 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow text-left text-gray-500 hover:text-gray-700 cursor-pointer"
+          >
+            Create a post...
+          </button>
+        }
         {showNewPost &&
           <form
             className="bg-white rounded-lg shadow-md p-6 mb-6"
@@ -49,7 +64,7 @@ function App() {
               <div className="flex justify-end gap-4">
                 <button
                   type="button"
-                  onClick={() => alert("Cancel")}
+                  onClick={() => setShowNewPost(false)}
                   className="px-4 py-2 text-gray-600 hover:text-gray-800 cursor-pointer">
                     Cancel
                 </button>
@@ -62,6 +77,19 @@ function App() {
               </div>
           </form>
         }
+        {posts.map((post) => (
+          <div
+            key={post.id}
+            className="bg-white rounded-lg shadow-md p-6 mb-6">
+              <h2 className="text-xl font-bold">{post.title}</h2>
+              <p className="text-gray-600 mt-2">{post.content}</p>
+          </div>
+        ))}
+        {posts.length === 0 && (
+            <div className="text-center text-gray-500 py-12">
+              No posts yet. Be the first to create one!
+            </div>
+          )}
       </main>
     </div>
   )
