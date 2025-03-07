@@ -3,6 +3,7 @@ import { useState } from "react";
 import { RootState } from './store/store';
 import { addPost } from './store/postsSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { Post } from "./components/Post";
 
 function App() {
   const dispatch = useDispatch();
@@ -77,14 +78,12 @@ function App() {
               </div>
           </form>
         }
-        {posts.map((post) => (
-          <div
+        {posts.map(post => 
+          <Post
             key={post.id}
-            className="bg-white rounded-lg shadow-md p-6 mb-6">
-              <h2 className="text-xl font-bold">{post.title}</h2>
-              <p className="text-gray-600 mt-2">{post.content}</p>
-          </div>
-        ))}
+            post={post}
+          />
+        )}
         {posts.length === 0 && (
             <div className="text-center text-gray-500 py-12">
               No posts yet. Be the first to create one!
