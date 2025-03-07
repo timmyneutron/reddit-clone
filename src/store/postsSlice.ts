@@ -15,14 +15,13 @@ const postsSlice = createSlice({
   initialState,
   reducers: {
     addPost(state, action: PayloadAction<{ title: string; content: string }>) {
-      const newPost: Post = {
+      state.posts.unshift({
         id: crypto.randomUUID(),
         ...action.payload,
         createdAt: formatISO(new Date()),
         comments: [],
         score: 0,
-      };
-      state.posts.unshift(newPost);
+      });
     },
     votePost(state, action: PayloadAction<{ postId: string; change: number }>) {
       const post = state.posts.find(p => p.id === action.payload.postId);
@@ -30,8 +29,19 @@ const postsSlice = createSlice({
         post.score += action.payload.change;
       }
     },
+    addComment(state, action: PayloadAction<{ postId: string; content: string }>) {
+      const post = state.posts.find(p => p.id === action.payload.postId);
+      if (post) {
+        post.comments.unshift({
+          id: crypto.randomUUID(),
+          content: action.payload.content,
+          createdAt: formatISO(new Date()),
+          score: 0,
+        });
+      }
+    },
   },
 });
 
-export const { addPost, votePost } = postsSlice.actions;
+export const { addPost, votePost, addComment } = postsSlice.actions;
 export default postsSlice.reducer;
